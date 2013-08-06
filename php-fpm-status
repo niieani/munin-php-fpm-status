@@ -41,15 +41,17 @@ if ( defined $ARGV[0] and $ARGV[0] eq "autoconf" )
 
 if ( defined $ARGV[0] and $ARGV[0] eq "config" )
 {
-	print('graph_title PHP5-FPM Accepted Connections
+	print('graph_title PHP5-FPM Status
 graph_args --base 1024 -l 0
 graph_vlabel Connections
-graph_category PHP
-graph_info Plugin created by TJ Stein
-accepted.label Idle
-accepted.draw AREA
-accepted.type DERIVE
-accepted.min 0
+graph_category PHP-FPM
+graph_order idle active total
+idle.label Idle
+idle.draw AREA
+active.label Active
+active.draw AREA
+total.label Total
+total.draw STACK
 ');
 
 	exit 0;
@@ -60,10 +62,20 @@ foreach my $port (@PORTS)
     my $ua = LWP::UserAgent->new(timeout => 30);
     my $url = sprintf $URL, $port;
     my $response = $ua->request(HTTP::Request->new('GET',$url));
-	if ($response->content =~ /accepted conn:\s+([0-9\.]+)/im) {
-        print "accepted.value $1\n";
+	if ($response->content =~ /idle processes:\s+([0-9\.]+)/im) {
+        print "idle.value $1\n";
     } else {
-        print "accepted.value U\n";
+        print "idle.value U\n";
+    }
+	if ($response->content =~ /active processes:\s+([0-9\.]+)/im) {
+        print "active.value $1\n";
+    } else {
+        print "active.value U\n";
+    }
+	if ($response->content =~ /total processes:\s+([0-9\.]+)/im) {
+        print "total.value $1\n";
+    } else {
+        print "total.value U\n";
     }
 }
 

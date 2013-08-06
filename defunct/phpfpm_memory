@@ -9,7 +9,7 @@ my $PHP_BIN = exists $ENV{'phpbin'} ? $ENV{'phpbin'} : "php5-fpm";
 if ( exists $ARGV[0] and $ARGV[0] eq "config" ) {
         print "graph_title PHP5-FPM Memory Usage\n";
         print "graph_vlabel RAM\n";
-        print "graph_category PHP\n";
+        print "graph_category PHP-FPM\n";
         print "ram.label ram\n";
                 print "graph_args --base 1024\n";
 } else {
